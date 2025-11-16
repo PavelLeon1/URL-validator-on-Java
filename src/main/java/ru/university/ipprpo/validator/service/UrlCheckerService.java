@@ -68,7 +68,7 @@ public class UrlCheckerService {
      * @param statusCode HTTP код.
      * @return {@link UrlStatus} - категория статуса.
      */
-    private UrlStatus classifyStatusCode(int statusCode) {
+    UrlStatus classifyStatusCode(int statusCode) {
         if (statusCode >= 200 && statusCode < 300) {
             return UrlStatus.OK;
         } else if (statusCode >= 300 && statusCode < 400) {

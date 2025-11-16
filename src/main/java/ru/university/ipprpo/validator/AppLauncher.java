@@ -5,9 +5,11 @@ import ru.university.ipprpo.validator.model.UrlResponse;
 import ru.university.ipprpo.validator.service.ReportGenerator;
 import ru.university.ipprpo.validator.service.UrlCheckerService;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,9 +25,10 @@ public class AppLauncher {
         String filePath = AppConfig.getProperty("urls.file.path");
         List<String> urls;
         try {
-            urls = Files.readAllLines(Paths.get(filePath));
+            // Читаем файл как ресурс
+            urls = readLinesFromResource(filePath);
         } catch (IOException e) {
-            System.err.println("Ошибка: не удалось прочитать файл со списком URL: " + filePath);
+            System.err.println("Ошибка: не удалось прочитать файл со списком URL из ресурсов: " + filePath);
             return;
         }
 
@@ -42,5 +45,20 @@ public class AppLauncher {
         // печать ответа
         reportGenerator.printReport(results);
         System.out.println("\nValidation finished.");
+    }
+    /**
+     * Вспомогательный метод для чтения всех строк из файла в ресурсах.
+     * @param path Путь к файлу внутри папки resources.
+     * @return Список строк из файла.
+     * @throws IOException если файл не найден или не может быть прочитан.
+     */
+    private static List<String> readLinesFromResource(String path) throws IOException {
+        InputStream inputStream = AppLauncher.class.getClassLoader().getResourceAsStream(path);
+        if (inputStream == null) {
+            throw new IOException("Ресурс не найден: " + path);
+        }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            return reader.lines().collect(Collectors.toList());
+        }
     }
 }
