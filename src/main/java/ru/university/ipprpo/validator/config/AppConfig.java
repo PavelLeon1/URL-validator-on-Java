@@ -1,6 +1,5 @@
 package ru.university.ipprpo.validator.config;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -18,14 +17,12 @@ public class AppConfig {
         try (InputStream input = AppConfig.class.getClassLoader().getResourceAsStream(propFileName)) {
 
             if (input == null) {
-                System.err.println("Ошибка: Не удалось найти файл конфигурации '" + propFileName + "' в ресурсах.");
-                System.exit(1);
+                throw new RuntimeException("Критическая ошибка: Не удалось найти файл конфигурации '" + propFileName + "' в ресурсах.");
             }
             properties.load(input);
 
         } catch (IOException ex) {
-            System.err.println("Ошибка: Не удалось загрузить файл конфигурации app.properties.");
-            System.exit(1);
+            throw new RuntimeException("Критическая ошибка: Не удалось загрузить файл конфигурации app.properties.", ex);
         }
     }
 
