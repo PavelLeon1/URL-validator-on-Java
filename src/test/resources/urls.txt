@@ -1,0 +1,5 @@
+https://google.com
+https://github.com
+https://go-away-google.com/no-such-page-404
+https://httpstat.us/503
+https://httpstat.us/301
