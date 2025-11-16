@@ -23,33 +23,40 @@ public class AppLauncher {
      * @param args Аргументы командной строки (не используются).
      */
     public static void main(String[] args) {
-        System.out.println("Starting URL validation...");
-
-        // путь к файлу из конфигурации
-        String filePath = AppConfig.getProperty("urls.file.path");
-        List<String> urls;
         try {
-            // Читаем файл как ресурс
-            urls = readLinesFromResource(filePath);
-        } catch (IOException e) {
-            System.err.println("Ошибка: не удалось прочитать файл со списком URL из ресурсов: " + filePath);
-            return;
+            System.out.println("Starting URL validation...");
+
+            // путь к файлу из конфигурации
+            String filePath = AppConfig.getProperty("urls.file.path");
+            List<String> urls;
+            try {
+                // Читаем файл как ресурс
+                urls = readLinesFromResource(filePath);
+            } catch (IOException e) {
+                System.err.println("Ошибка: не удалось прочитать файл со списком URL из ресурсов: " + filePath);
+                return;
+            }
+
+            // инициализируем сервисы
+            UrlCheckerService checkerService = new UrlCheckerService();
+            ReportGenerator reportGenerator = new ReportGenerator();
+
+            // проверка каждого URL и сбор резултатов
+            // parallelStream() позволяет выполнять запросы параллельно, ускоряя работу.
+            List<UrlResponse> results = urls.parallelStream()
+                    .map(checkerService::checkUrl)
+                    .collect(Collectors.toList());
+
+            // печать ответа
+            reportGenerator.printReport(results);
+            System.out.println("\nValidation finished.");
+
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
         }
-
-        // инициализируем сервисы
-        UrlCheckerService checkerService = new UrlCheckerService();
-        ReportGenerator reportGenerator = new ReportGenerator();
-
-        // проверка каждого URL и сбор резултатов
-        // parallelStream() позволяет выполнять запросы параллельно, ускоряя работу.
-        List<UrlResponse> results = urls.parallelStream()
-                .map(checkerService::checkUrl)
-                .collect(Collectors.toList());
-
-        // печать ответа
-        reportGenerator.printReport(results);
-        System.out.println("\nValidation finished.");
     }
+
     /**
      * Вспомогательный метод для чтения всех строк из файла в ресурсах.
      * @param path Путь к файлу внутри папки resources.
