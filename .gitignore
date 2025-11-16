@@ -1,0 +1,22 @@
+# Gradle
+.gradle
+build/
+!build/libs/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Configuration file
+app.properties
+config/app.properties
