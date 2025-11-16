@@ -1,43 +1,61 @@
 name: Java CI with Gradle
 
-# Триггер: запускать рабочий процесс при push в любую ветку
 on: [push]
 
 # Список "работ" или заданий, которые будут выполняться
 jobs:
   # Название работы - "build-and-test"
   build-and-test:
+    # Запускать на последней версии Ubuntu
     runs-on: ubuntu-latest
 
+    # Стратегия "матрицы" для запуска на нескольких версиях Java
     strategy:
       # Не останавливать все сборки, если одна из них упала
       fail-fast: false
       matrix:
-        # список версий Java, на которых нужно запустить сборку
         java: [ 11, 17, 21 ]
 
+    # Шаги, которые будут выполнены для каждой версии Java из матрицы
     steps:
       # 1. Клонирование репозитория
       - name: Checkout repository
         uses: actions/checkout@v4
 
       # 2. Установка нужной версии JDK
-      # action 'setup-java' для установки Java
-      # Версия Java будет подставлена из матрицы (11, 17 или 21)
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.java }}
           distribution: 'temurin'
 
-      # 3. Предоставление прав на выполнение для Gradle Wrapper
+      # 3. Создание файла конфигурации app.properties
+      # Этот шаг будет выполнен перед сборкой. Он создает нужные директории и файлы.
+      - name: Create app.properties file
+        run: |
+          mkdir -p src/main/resources
+          echo "urls.file.path=urls.txt" > src/main/resources/app.properties
+          echo "http.timeout.ms=5000" >> src/main/resources/app.properties
+          echo "http.method=HEAD" >> src/main/resources/app.properties
+          
+          # Копируем созданный файл и для тестов
+          mkdir -p src/test/resources
+          cp src/main/resources/app.properties src/test/resources/app.properties
+          
+          # Также создаем файл urls.txt, так как он тоже может быть в .gitignore
+          echo "https://google.com" > src/main/resources/urls.txt
+          echo "https://github.com" >> src/main/resources/urls.txt
+          cp src/main/resources/urls.txt src/test/resources/urls.txt
+
+
+      # 4. Предоставление прав на выполнение для Gradle Wrapper
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # 4. Запуск статического анализа Checkstyle
+      # 5. Запуск статического анализа Checkstyle
       - name: Run Checkstyle
         run: ./gradlew checkstyleMain
 
-      # 5. Сборка проекта и запуск тестов
+      # 6. Сборка проекта и запуск тестов
       - name: Build with Gradle
         run: ./gradlew build
