@@ -97,7 +97,7 @@
     *(Например, `java -jar build/libs/url-validator-1.0-SNAPSHOT.jar`)*
 
 ### Пример вывода в консоль
-    ```
+    
     Starting URL validation...
     --- FAILED URLS ---
     [CLIENT_ERROR: 404] https://google.com/no-such-page-404
@@ -107,7 +107,7 @@
     [OK: 200] https://github.com
     [REDIRECTION: 301] https://httpstat.us/301
     Validation finished.
-    ```
+    
 ## CI/CD Pipeline
 
 Проект использует **GitHub Actions** для автоматизации процессов сборки и тестирования. Рабочий процесс настроен в файле `.github/workflows/ci.yml` и запускается при каждом `push` в репозиторий.
