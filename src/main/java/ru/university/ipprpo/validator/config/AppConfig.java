@@ -12,15 +12,19 @@ public class AppConfig {
 
     private static final Properties properties = new Properties();
 
-    // Статический блок для загрузки конфигурации при первом обращении к классу.
+    // статический блок для загрузки конфигурации при первом обращении к классу.
     static {
-        try (InputStream input = new FileInputStream("./config/app.properties")) {
+        String propFileName = "app.properties";
+        try (InputStream input = AppConfig.class.getClassLoader().getResourceAsStream(propFileName)) {
+
+            if (input == null) {
+                System.err.println("Ошибка: Не удалось найти файл конфигурации '" + propFileName + "' в ресурсах.");
+                System.exit(1);
+            }
             properties.load(input);
+
         } catch (IOException ex) {
-            // Пояснение: В реальном приложении здесь была бы более сложная обработка ошибок.
-            // Для лабораторной работы достаточно вывести ошибку в консоль.
             System.err.println("Ошибка: Не удалось загрузить файл конфигурации app.properties.");
-            // Завершаем работу, так как без конфигурации приложение неработоспособно.
             System.exit(1);
         }
     }
