@@ -18,6 +18,10 @@ import java.util.stream.Collectors;
  */
 public class AppLauncher {
 
+    /**
+     * Главный метод для запуска приложения валидации URL.
+     * @param args Аргументы командной строки (не используются).
+     */
     public static void main(String[] args) {
         System.out.println("Starting URL validation...");
 

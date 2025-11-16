@@ -1,5 +1,23 @@
 plugins {
     id 'java'
+    id 'checkstyle'
+}
+
+checkstyle {
+    toolVersion = "12.1.2"
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    ignoreFailures = false
+    showViolations = true
+    maxWarnings = 0
+}
+
+tasks.named('checkstyleMain') {
+    source = sourceSets.main.java.srcDirs
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 group = 'ru.university.ipprpo'
