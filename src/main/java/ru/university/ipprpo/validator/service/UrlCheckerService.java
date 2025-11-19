@@ -58,7 +58,7 @@ public class UrlCheckerService {
         } catch (HttpTimeoutException e) {
             return new UrlResponse(urlString, 0, UrlStatus.TIMEOUT);
         } catch (Exception e) {
-            // Пояснение: Сюда попадают ошибки DNS, SSL, IO и прочие.
+            // ошибки DNS, SSL, IO и прочие.
             return new UrlResponse(urlString, 0, UrlStatus.UNKNOWN_ERROR);
         }
     }

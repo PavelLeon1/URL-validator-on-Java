@@ -1,6 +1,11 @@
 name: Java CI with Gradle
 
-on: [push]
+on:
+  push:
+    branches: [ develop ]
+
+  pull_request:
+    branches: [ develop ]
 
 # Список "работ" или заданий, которые будут выполняться
 jobs:

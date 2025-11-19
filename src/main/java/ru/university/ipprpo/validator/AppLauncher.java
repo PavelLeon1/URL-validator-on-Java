@@ -2,14 +2,13 @@ package ru.university.ipprpo.validator;
 
 import ru.university.ipprpo.validator.config.AppConfig;
 import ru.university.ipprpo.validator.model.UrlResponse;
+
+import ru.university.ipprpo.validator.provider.FileUrlProvider;
+import ru.university.ipprpo.validator.provider.UrlProvider;
 import ru.university.ipprpo.validator.service.ReportGenerator;
 import ru.university.ipprpo.validator.service.UrlCheckerService;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,14 +25,16 @@ public class AppLauncher {
         try {
             System.out.println("Starting URL validation...");
 
-            // путь к файлу из конфигурации
+            // создаем экземпляр конкретной реализации провайдера
             String filePath = AppConfig.getProperty("urls.file.path");
+            UrlProvider urlProvider = new FileUrlProvider(filePath);
+
             List<String> urls;
             try {
-                // Читаем файл как ресурс
-                urls = readLinesFromResource(filePath);
+                // URL через интерфейс, не зная, откуда они берутся
+                urls = urlProvider.getUrls();
             } catch (IOException e) {
-                System.err.println("Ошибка: не удалось прочитать файл со списком URL из ресурсов: " + filePath);
+                System.err.println("Ошибка: не удалось прочитать данные от провайдера URL: " + e.getMessage());
                 return;
             }
 
@@ -54,22 +55,6 @@ public class AppLauncher {
         } catch (RuntimeException e) {
             System.err.println(e.getMessage());
             System.exit(1);
-        }
-    }
-
-    /**
-     * Вспомогательный метод для чтения всех строк из файла в ресурсах.
-     * @param path Путь к файлу внутри папки resources.
-     * @return Список строк из файла.
-     * @throws IOException если файл не найден или не может быть прочитан.
-     */
-    private static List<String> readLinesFromResource(String path) throws IOException {
-        InputStream inputStream = AppLauncher.class.getClassLoader().getResourceAsStream(path);
-        if (inputStream == null) {
-            throw new IOException("Ресурс не найден: " + path);
-        }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            return reader.lines().collect(Collectors.toList());
         }
     }
 }
