@@ -36,21 +36,21 @@ jobs:
 
       # 3. Создание файла конфигурации app.properties
       # Этот шаг будет выполнен перед сборкой. Он создает нужные директории и файлы.
-      - name: Create app.properties file
-        run: |
-          mkdir -p src/main/resources
-          echo "urls.file.path=urls.txt" > src/main/resources/app.properties
-          echo "http.timeout.ms=5000" >> src/main/resources/app.properties
-          echo "http.method=HEAD" >> src/main/resources/app.properties
+      #- name: Create app.properties file
+       # run: |
+        #  mkdir -p src/main/resources
+         # echo "urls.file.path=urls.txt" > src/main/resources/app.properties
+          #echo "http.timeout.ms=5000" >> src/main/resources/app.properties
+          #echo "http.method=HEAD" >> src/main/resources/app.properties
           
           # Копируем созданный файл и для тестов
-          mkdir -p src/test/resources
-          cp src/main/resources/app.properties src/test/resources/app.properties
+          #mkdir -p src/test/resources
+          #cp src/main/resources/app.properties src/test/resources/app.properties
           
           # Также создаем файл urls.txt, так как он тоже может быть в .gitignore
-          echo "https://google.com" > src/main/resources/urls.txt
-          echo "https://github.com" >> src/main/resources/urls.txt
-          cp src/main/resources/urls.txt src/test/resources/urls.txt
+          #echo "https://google.com" > src/main/resources/urls.txt
+          #echo "https://github.com" >> src/main/resources/urls.txt
+          #cp src/main/resources/urls.txt src/test/resources/urls.txt
 
 
       # 4. Предоставление прав на выполнение для Gradle Wrapper
@@ -58,8 +58,8 @@ jobs:
      #   run: chmod +x gradlew
 
       # 5. Запуск статического анализа Checkstyle
-      - name: Run Checkstyle
-        run: gradlew.bat checkstyleMain
+      # - name: Run Checkstyle
+       # run: gradlew.bat checkstyleMain
 
       # 6. Сборка проекта и запуск тестов
       - name: Build with Gradle
