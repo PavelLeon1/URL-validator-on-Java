@@ -64,3 +64,5 @@ jobs:
       # 6. Сборка проекта и запуск тестов
       - name: Build with Gradle
         run: ./gradlew build
+      - name: JavaVersion
+        run: java --version
