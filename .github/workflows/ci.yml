@@ -12,7 +12,7 @@ jobs:
   # Название работы - "build-and-test"
   build-and-test:
     # Запускать на последней версии Ubuntu
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     # Стратегия "матрицы" для запуска на нескольких версиях Java
     strategy:
@@ -54,15 +54,15 @@ jobs:
 
 
       # 4. Предоставление прав на выполнение для Gradle Wrapper
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+     # - name: Grant execute permission for gradlew
+     #   run: chmod +x gradlew
 
       # 5. Запуск статического анализа Checkstyle
       - name: Run Checkstyle
-        run: ./gradlew checkstyleMain
+        run: gradlew.bat checkstyleMain
 
       # 6. Сборка проекта и запуск тестов
       - name: Build with Gradle
-        run: ./gradlew build
+        run: gradlew.bat build
       - name: JavaVersion
         run: java --version
