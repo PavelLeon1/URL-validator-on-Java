@@ -1,8 +1,10 @@
 plugins {
-    id 'java'
+    id 'application'
     id 'checkstyle'
 }
-
+application {
+    mainClass = 'ru.university.ipprpo.validator.AppLauncher'
+}
 checkstyle {
     toolVersion = "12.1.2"
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
@@ -31,6 +33,7 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
