@@ -79,7 +79,7 @@
         ```
     *   Для Windows:
         ```bash
-        gradlew.bat build
+        .\gradlew build
         ```
 
 2.  **Запуск приложения:**
@@ -92,7 +92,7 @@
         ```
     *   Для Windows:
         ```bash
-        gradlew.bat run
+        .\gradlew run
         ```
 
 ### Пример вывода в консоль
